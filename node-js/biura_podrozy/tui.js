@@ -1,14 +1,83 @@
-async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, transport, order, results){
+const puppeteer = require('puppeteer')
+const jsdom = require("jsdom")
+const dom = new jsdom.JSDOM("")
+const jquery = require('jquery')(dom.window) 
+
+async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, order, results){
+
+    url = "https://www.tui.pl/wypoczynek/wyniki-wyszukiwania-samolot?q="
+
+    if(order=="priceAsc"){
+        url += ":price"
+    }else if(order=="priceDesc"){
+        url += ":priceDESC"
+    }else if(order=="dateAsc"||order==""){
+        url += ":flightDate"
+    }
+
+    url += ":byPlane:T"
+    
+    let startPoints = []
+    if(Array.isArray(fromWhere)){
+        for(const el of fromWhere){
+            if(el=='BZG'){
+                startPoints.push('BZG')
+                }else if(el=='GDN'){
+                startPoints.push('GDN')
+                }else if(el=='KTW'){
+                startPoints.push('KTW')
+                }else if(el=='KRK'){
+                startPoints.push('KRK')
+                }else if(el=='LUZ'){
+                startPoints.push('LUZ')
+                }else if(el=='LCJ'){
+                startPoints.push('LCJ')
+                }else if(el=='POZ'){
+                startPoints.push('POZ')
+                }else if(el=='SZZ'){
+                startPoints.push('SZZ')
+                }else if(el=='WAW'){
+                startPoints.push('WAW')
+                }else if(el=='WMI'){
+                startPoints.push('WMI')
+                }else if(el=='WRO'){
+                startPoints.push('WRO')
+                }else if(el=='RZE'){
+                startPoints.push('RZE')
+                }
+        } 
+    }
+    if(startPoints!=[]){
+        url += ":a:"+startPoints.join(":a:")
+    }
+    
+    url += ":dF:1:dT:999"
 
     if(dateFrom!=""){
         // let _dateFrom = new Date(dateFrom);
         let _dateFrom = new Date(dateFrom) < new Date() ? new Date() : new Date(dateFrom);
-        console.log(`:startDate:${("0"+_dateFrom.getDate()).slice(-2)}.${("0"+(_dateFrom.getMonth()+1)).slice(-2)}.${_dateFrom.getFullYear()}`)
+        url += `:startDate:${("0"+_dateFrom.getDate()).slice(-2)}.${("0"+(_dateFrom.getMonth()+1)).slice(-2)}.${_dateFrom.getFullYear()}`
+    }else{
+        let _dateFrom = new Date();
+        url += `:startDate:${("0"+_dateFrom.getDate()).slice(-2)}.${("0"+(_dateFrom.getMonth()+1)).slice(-2)}.${_dateFrom.getFullYear()}`    
     }
     
     if(dateTo!=""){
         let _dateTo = new Date(dateTo);
-        console.log(`:endDate:=${("0"+_dateTo.getDate()).slice(-2)}.${("0"+(_dateTo.getMonth()+1)).slice(-2)}.${_dateTo.getFullYear()}`)
+        url += `:endDate:${("0"+_dateTo.getDate()).slice(-2)}.${("0"+(_dateTo.getMonth()+1)).slice(-2)}.${_dateTo.getFullYear()}`
+    }
+
+    url += ":ctAdult:"+adults
+
+
+    if(kids.length!=0){
+        let _kids = []
+        for(let i=0;i<kids.length;i++){
+            const date = new Date(kids[i])
+            _kids[i] = `${("0"+date.getDate()).slice(-2)}.${("0"+(date.getMonth()+1)).slice(-2)}.${date.getFullYear()}`
+        }
+        url += `:ctChild:${_kids.length}:birthDate:${_kids.join(":birthDate:")}`
+
     }
 
     let destinations = []
@@ -82,8 +151,24 @@ async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, tra
         }    
     }
     if(destinations!=[]){
-        console.log(":c:"+destinations.join(":c:"));
+        url += ":c:"+destinations.join(":c:")
     }
+
+    url += ":minHotelCategory:defaultHotelCategory:tripAdvisorRating:defaultTripAdvisorRating:beach_distance:defaultBeachDistance"
+
+    url += ":tripType:WS"
+
+    url += "&fullPrice=false"
+    console.log(url)
+
+    const browser = await puppeteer.launch({
+        headless: false,
+        defaultViewport: ''
+    });
+    const page = await browser.newPage();
+    await page.goto(url);
+    
+   
 }
 
 console.log("Zaimportowano skrypt dla biura podrozy TUI")

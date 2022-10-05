@@ -3,10 +3,10 @@
 <?php
 
     $conn = new mysqli("localhost","root","","biura_cele");
-    $res = $conn->query('SELECT `rainbow`,`API` FROM `baza` WHERE `rainbow`!="N"');
-    while($rec = $res->fetch_object()){
-        echo "if(el=='$rec->API'){<br>destinations.push('$rec->rainbow')<br>}else ";
-    }
+    // $res = $conn->query('SELECT `rainbow`,`API` FROM `baza` WHERE `rainbow`!="N"');
+    // while($rec = $res->fetch_object()){
+    //     echo "if(el=='$rec->API'){<br>destinations.push('$rec->rainbow')<br>}else ";
+    // }
 
     // $res = $conn->query('SELECT `tui`,`API` FROM `baza` WHERE `tui`!="N"');
     // while($rec = $res->fetch_object()){
@@ -17,6 +17,21 @@
     // while($rec = $res->fetch_object()){
     //     echo "if(el=='$rec->API'){<br>destinations.push('$rec->itaka')<br>}else ";
     // }
+
+    // $res = $conn->query('SELECT `rainbow`,`API` FROM `lotniska` WHERE `rainbow`!="N"');
+    // while($rec = $res->fetch_object()){
+    //     echo "if(el=='$rec->API'){<br>startPoints.push('$rec->rainbow')<br>}else ";
+    // }
+
+    // $res = $conn->query('SELECT `tui`,`API` FROM `lotniska` WHERE `tui`!="N"');
+    // while($rec = $res->fetch_object()){
+    //     echo "if(el=='$rec->API'){<br>startPoints.push('$rec->tui')<br>}else ";
+    // }
+
+    $res = $conn->query('SELECT `itaka`,`API` FROM `lotniska` WHERE `itaka`!="N"');
+    while($rec = $res->fetch_object()){
+        echo "if(el=='$rec->API'){<br>startPoints.push('$rec->itaka')<br>}else ";
+    }
 
     $conn->close();
 ?>

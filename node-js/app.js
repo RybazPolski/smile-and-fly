@@ -41,7 +41,10 @@ async function getTest(query){
 
 
 
-async function getAll(dateFrom = "dowolna", dateTo = "dowolna", fromWhere = [], toWhere = [], adults = 1, kids = [], transport="samolot", order="najblizsze", pages=1){}
+async function getAll(dateFrom = "dowolna", dateTo = "dowolna", fromWhere = [], toWhere = [], adults = 1, kids = [], order="najblizsze", pages=1){}
 
-// rainbow.getOffers("2022-09-01","2023-06-01",0,["dom","egi-sha","egi-tab","dupa"],2,["2013-12-02","2011-03-11","2006-10-28"],"AIR","priceAsc",30)
-rainbow.getOffers("2022-11-01","2022-12-31",0,["gre-kre"],2,["2005-05-05"],"","",60)
+tui.getOffers("2022-09-01","2023-06-01",[],["dom","egi-sha","egi-tab","dupa"],c,["2013-12-02","2011-03-11","2006-10-28"],"priceAsc",30)
+// rainbow.getOffers("2022-11-01","2022-12-31",["WAW","WMI"],["his"],2,["2005-05-05"],"",60)
+// console.log(.then)
+
+// tui.getOffers("2022-11-01","2022-12-31",["WAW","WMI"],["dom"],2,["2005-05-05","2006-06-06"],"",60)

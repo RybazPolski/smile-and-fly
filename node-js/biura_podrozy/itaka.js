@@ -1,4 +1,6 @@
-async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, transport, order, results){
+const puppeteer = require('puppeteer')
+
+async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, order, results){
     
     if(dateFrom!=""){
         // let _dateFrom = new Date(dateFrom);
@@ -10,6 +12,33 @@ async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, tra
         console.log(`&date-to=${_dateTo.getFullYear()}-${("0"+(_dateTo.getMonth()+1)).slice(-2)}-${("0"+_dateTo.getDate()).slice(-2)}`)
     }
     
+    let startPoints = []
+    if(Array.isArray(fromWhere)){
+        for(const el of fromWhere){
+            if(el=='GDN'){
+                startPoints.push('gdansk')
+                }else if(el=='KTW'){
+                startPoints.push('katowice')
+                }else if(el=='KRK'){
+                startPoints.push('krakow')
+                }else if(el=='POZ'){
+                startPoints.push('poznan')
+                }else if(el=='SZZ'){
+                startPoints.push('szczecin')
+                }else if(el=='WAW'){
+                startPoints.push('warszawa')
+                }else if(el=='WMI'){
+                startPoints.push('warszawa-modlin')
+                }else if(el=='WRO'){
+                startPoints.push('wroclaw')
+                }else if(el=='ZLG'){
+                startPoints.push('zielona-gora')
+                }
+        } 
+    }
+    if(startPoints!=[]){
+        console.log("&dep-region="+startPoints.join(","));
+    }
     
     let destinations = []
     if(Array.isArray(toWhere)){

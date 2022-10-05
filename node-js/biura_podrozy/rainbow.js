@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer')
 
-async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, transport, order, results){
+async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, order, results){
     
     console.log(`Showing ${results} results for:`)
     
@@ -18,6 +18,38 @@ async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, tra
         url += `&data=${_dateTo.getFullYear()}-${("0"+(_dateTo.getMonth()+1)).slice(-2)}-${("0"+_dateTo.getDate()).slice(-2)}`
     }
     
+    let startPoints = []
+    if(Array.isArray(fromWhere)){
+        for(const el of fromWhere){
+            if(el=='BZG'){
+                startPoints.push('BZG')
+                }else if(el=='GDN'){
+                startPoints.push('GDN')
+                }else if(el=='KTW'){
+                startPoints.push('KTW')
+                }else if(el=='KRK'){
+                startPoints.push('KRK')
+                }else if(el=='LUZ'){
+                startPoints.push('LUZ')
+                }else if(el=='LCJ'){
+                startPoints.push('LCJ')
+                }else if(el=='POZ'){
+                startPoints.push('POZ')
+                }else if(el=='SZZ'){
+                startPoints.push('SZZ')
+                }else if(el=='WAW'){
+                startPoints.push('WAW')
+                }else if(el=='WMI'){
+                startPoints.push('WMI')
+                }else if(el=='WRO'){
+                startPoints.push('WRO')
+                }
+        } 
+    }
+    if(startPoints!=[]){
+        url += "&wybraneSkad="+startPoints.join('&wybraneSkad=')
+    }
+
     let destinations = []
     if(Array.isArray(toWhere)){
         for(const el of toWhere){
@@ -135,15 +167,15 @@ async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, tra
         url += _kids
     }
 
-    if(transport==""){
-        url += "&typTransportu=dowolny"
-    }else if(transport=="AIR"){
+    // if(transport==""){
+        // url += "&typTransportu=dowolny"
+    // }else if(transport=="AIR"){
         url += "&typTransportu=AIR"
-    }else if(transport=="BUS"){
-        url += "&typTransportu=BUS"
-    }else if(transport=="SELF"){
-        url += "&typTransportu=SELF"
-    }
+    // }else if(transport=="BUS"){
+        // url += "&typTransportu=BUS"
+    // }else if(transport=="SELF"){
+        // url += "&typTransportu=SELF"
+    // }
 
     if(order=="priceAsc"){
         url += "&sortowanie=cena-asc"
