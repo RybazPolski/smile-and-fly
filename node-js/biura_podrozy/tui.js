@@ -1,7 +1,4 @@
 const puppeteer = require('puppeteer')
-const jsdom = require("jsdom")
-const dom = new jsdom.JSDOM("")
-const jquery = require('jquery')(dom.window) 
 
 async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, order, results){
 
