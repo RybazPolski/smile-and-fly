@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/julianrybarczyk/slime-and-fall#readme",
   "dependencies": {
+    "jquery": "^3.6.1",
     "puppeteer": "^18.0.5"
   }
 }
