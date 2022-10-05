@@ -9,6 +9,9 @@ async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, tra
     if(dateFrom!=""){
         let _dateFrom = new Date(dateFrom) < new Date() ? new Date() : new Date(dateFrom);
         url += `&data=${_dateFrom.getFullYear()}-${("0"+(_dateFrom.getMonth()+1)).slice(-2)}-${("0"+_dateFrom.getDate()).slice(-2)}`
+    }else{
+        let _dateFrom = new Date()
+        url += `&data=${_dateFrom.getFullYear()}-${("0"+(_dateFrom.getMonth()+1)).slice(-2)}-${("0"+_dateFrom.getDate()).slice(-2)}`
     }
     if(dateTo!=""){
         let _dateTo = new Date(dateTo);
@@ -44,8 +47,8 @@ async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, tra
                 destinations.push('korfu')
                 }else if(el=='gre-kos'){
                 destinations.push('kos')
-                }else if(el=='kreta-province'){
-                destinations.push('"kreta-heraklion')
+                }else if(el=='gre-kre'){
+                destinations.push('kreta-heraklion&wybraneDokad=kreta-chania')
                 }else if(el=='gre-lef'){
                 destinations.push('lefkada')
                 }else if(el=='gre-les'){

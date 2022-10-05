@@ -34,8 +34,8 @@ async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, tra
                 destinations.push('korfu-province')
                 }else if(el=='gre-kos'){
                 destinations.push('kos-province')
-                }else if(el=='kreta-province'){
-                destinations.push('CHQ')
+                }else if(el=='gre-kre'){
+                destinations.push('kreta-province')
                 }else if(el=='gre-les'){
                 destinations.push('lesbos-province')
                 }else if(el=='gre-myk'){
