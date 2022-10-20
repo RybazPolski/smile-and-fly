@@ -1,6 +1,20 @@
 const puppeteer = require('puppeteer')
+const utils = require('../utils')
 
-async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, order, results){
+/**
+ * @description Zwraca oferty wycieczek samolotem z biura podróży TUI zgodnie z podanymi kryteriami
+ * @param {String} dateFrom Od kiedy (yyyy-mm-dd)
+ * @param {String} dateTo Do kiedy (yyyy-mm-dd)
+ * @param {String} fromWhere Skąd (Kody lotnisk dostępne pod adresem https://github.com/julianrybarczyk/slime-and-fall/blob/main/README.md)
+ * @param {String} toWhere Dokąd (Kody regionów dostępne pod adresem https://github.com/julianrybarczyk/slime-and-fall/blob/main/README.md)
+ * @param {Number} adults Ilość dorosłych
+ * @param {Array.<String>} kids Daty urodzenia dzieci w tablicy
+ * @param {('priceAsc'|'priceDesc'|'dateAsc')} order Sortowanie (cena rosnąco / cena malejąco / najbliższy termin)
+ * @param {Number} results Ilość wyników do zwrócenia
+ * @returns {Array} Tablica obiektów
+ * 
+ */
+async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [], adults = 1, kids = [], order = "dateAsc", results = 30){
 
     url = "https://www.tui.pl/wypoczynek/wyniki-wyszukiwania-samolot?q="
 
@@ -156,19 +170,92 @@ async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, ord
     url += ":tripType:WS"
 
     url += "&fullPrice=false"
-    console.log(url)
+    // console.log(url)
 
     const browser = await puppeteer.launch({
-        headless: false,
+        // headless: false,
         defaultViewport: ''
     });
     const page = await browser.newPage();
     await page.goto(url);
     
-   
+    await page.waitForSelector(".cookies-bar__button--accept")
+    page.evaluate(_ => {
+        document.querySelector(".cookies-bar__button--accept").click()
+    })
+
+    if(!(await page.waitForSelector(".offer-tile-wrapper"))){
+        return []
+    }
+
+    await utils.autoScroll(page);
+
+    while(await page.evaluate(_=>{return document.querySelectorAll('.offer-tile-wrapper').length}) < results){
+        await page.evaluate(_=>{
+            for(let el of document.querySelectorAll('.offer-tile-wrapper')){
+                el.classList.add('prepared')
+            }
+        })
+        if(await page.evaluate(_=>{return document.querySelectorAll('.results-container__button').length==0})) break;false        
+        await page.evaluate(_=>{document.querySelector(".results-container__button").click()})
+        await page.waitForSelector(".offer-tile-wrapper:not(.prepared)")
+        await utils.autoScroll(page)
+    }
+
+    const offers = (await page.$$eval(".offer-tile-wrapper", elements => {
+            return elements.map(el => {
+                const properties = {};
+                
+                properties.travelAgency = "TUI" 
+
+                const title = el.querySelector(".offer-tile-body__hotel-name").innerHTML;
+                properties.title = title;
+                
+                const stars = el.querySelectorAll(".Rating_item__h0rsh").length ? el.querySelectorAll(".Rating_item__h0rsh").length : null;
+                properties.stars = stars;
+
+                const location = el.querySelector(".breadcrumbs__list").innerText || el.querySelector(".breadcrumbs__list").textContent;;
+                properties.location = location;
+
+                const price = parseFloat(el.querySelector(".price-value__amount").innerText.replace(" ",""));
+                properties.price = price;
+
+                const oldPrice = null
+                properties.oldPrice = oldPrice;
+
+                const dates = el.querySelector("[data-testid=offer-tile-departure-date]").innerText.split(" (")[0].split(" - ")
+                const dateFrom = dates[0]
+                const dateTo = dates[1]
+                const timeFrom = Date.parse(`${dateFrom.substring(6)}-${dateFrom.substring(3,5)}-${dateFrom.substring(0,2)}`)
+                const timeTo = Date.parse(`${dateTo.substring(6)}-${dateTo.substring(3,5)}-${dateTo.substring(0,2)}`)
+                properties.timeFrom = timeFrom
+                properties.timeTo = timeTo
+
+                const food = el.querySelector("[data-testid=offer-tile-boardType]").innerText
+                properties.food = food
+
+                const offerLink = el.querySelector(".offer-tile-body__title > a").href
+                properties.offerLink = offerLink
+
+                try{
+                    const imageLink = el.querySelector(".CarouselNew_carousel__WqEi_").querySelector('img').src || null
+                    properties.imageLink = imageLink
+                }catch(e){
+                    console.log(e)
+                }
+
+                return properties;
+            });
+        }))
+
+        
+
+    browser.close()
+    return offers.slice(0,results)
+ 
 }
 
-console.log("Zaimportowano skrypt dla biura podrozy TUI")
+// console.log("Zaimportowano skrypt dla biura podrozy TUI")
 module.exports = {
     getOffers
 }

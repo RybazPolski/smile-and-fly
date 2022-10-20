@@ -1,30 +1,26 @@
 const puppeteer = require('puppeteer')
+const utils = require('../utils')
 
-async function autoScroll(page){
-    await page.evaluate(async () => {
-        await new Promise((resolve) => {
-            var totalHeight = 0;
-            var distance = 100;
-            var timer = setInterval(() => {
-                var scrollHeight = document.body.scrollHeight;
-                window.scrollBy(0, distance);
-                totalHeight += distance;
 
-                if(totalHeight >= scrollHeight - window.innerHeight){
-                    clearInterval(timer);
-                    resolve();
-                }
-            }, 100);
-        });
-    });
-}
 
-async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, order, results){
+/**
+ * @description Zwraca oferty wycieczek samolotem z biura podróży Itaka zgodnie z podanymi kryteriami
+ * @param {String} dateFrom Od kiedy (yyyy-mm-dd)
+ * @param {String} dateTo Do kiedy (yyyy-mm-dd)
+ * @param {String} fromWhere Skąd (Kody lotnisk dostępne pod adresem https://github.com/julianrybarczyk/slime-and-fall/blob/main/README.md)
+ * @param {String} toWhere Dokąd (Kody regionów dostępne pod adresem https://github.com/julianrybarczyk/slime-and-fall/blob/main/README.md)
+ * @param {Number} adults Ilość dorosłych
+ * @param {Array.<String>} kids Daty urodzenia dzieci w tablicy
+ * @param {('priceAsc'|'priceDesc'|'dateAsc')} order Sortowanie (cena rosnąco / cena malejąco / najbliższy termin)
+ * @param {Number} results Ilość wyników do zwrócenia
+ * @returns {Array} Tablica obiektów
+ * 
+ */
+async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [], adults = 1, kids = [], order = "dateAsc", results = 30){
     
     let url = "https://www.itaka.pl/wyniki-wyszukiwania/wakacje/?view=offerList"
 
     if(dateFrom!=""){
-        // let _dateFrom = new Date(dateFrom);
         let _dateFrom = new Date(dateFrom) < new Date() ? new Date() : new Date(dateFrom);
         url += `&date-from=${_dateFrom.getFullYear()}-${("0"+(_dateFrom.getMonth()+1)).slice(-2)}-${("0"+_dateFrom.getDate()).slice(-2)}`
     }
@@ -156,7 +152,7 @@ async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, ord
         url += "&order=dateFromAsc"
     }
 
-    console.log(url)
+    // console.log(url)
 
     const browser = await puppeteer.launch({
         // headless: false,
@@ -171,33 +167,34 @@ async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, ord
     })
 
     if(!(await page.waitForSelector(".offer"))){
-        return {}
+        return []
     }
 
-    await autoScroll(page);
+    await utils.autoScroll(page);
 
-    while(await page.evaluate(_=>{return document.querySelectorAll('.offers').length}) < results){
+    while(await page.evaluate(_=>{return document.querySelectorAll('.offer').length}) < results){
         await page.evaluate(_=>{
-            for(let el of document.querySelectorAll('.offers')){
+            for(let el of document.querySelectorAll('.offer')){
                 el.classList.add('prepared')
             }
         })
         if(await page.evaluate(_=>{return document.querySelectorAll('.offer-list_more-offers').length==0})) break;false        
         await page.evaluate(_=>{document.querySelector(".offer-list_more-offers").click()})
         await page.waitForSelector(".offer:not(.prepared)")
-        await autoScroll(page)
+        await utils.autoScroll(page)
     }
 
-    page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
     const offers = (await page.$$eval(".offer", elements => {
             return elements.map(el => {
                 const properties = {};
                 
+                properties.travelAgency = "Itaka" 
+
                 const title = el.querySelector(".header_title > a").innerHTML;
                 properties.title = title;
                 
-                // const stars = (el.querySelector(".header_stars_link > span").querySelectorAll(".star").length - (el.querySelector(".header_stars_link > span").querySelectorAll(".star_half").length/2)) || undefined;
-                // properties.stars = stars;
+                const stars = el.querySelectorAll(".header_stars_link > span").length ? (el.querySelector(".header_stars_link > span").querySelectorAll(".star").length - (el.querySelector(".header_stars_link > span").querySelectorAll(".star_half").length/2)) : null;
+                properties.stars = stars;
 
                 const location = el.querySelector(".header_geo-labels").innerText || el.querySelector(".header_geo-labels").textContent;;
                 properties.location = location;
@@ -222,14 +219,12 @@ async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, ord
                 const offerLink = el.querySelector(".offer_link").href
                 properties.offerLink = offerLink
 
-
                 try{
                     const imageLink = el.querySelector(".figure_main-photo").src || el.querySelector(".item_photo-img").src || null
                     properties.imageLink = imageLink
                 }catch(e){
                     console.log(e)
                 }
-
 
                 return properties;
             });
@@ -238,11 +233,10 @@ async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, ord
         
 
     browser.close()
-    // return offers.slice(0,results)
-    return offers
+    return offers.slice(0,results)
 }
 
-console.log("Zaimportowano skrypt dla biura podrozy Itaka")
+// console.log("Zaimportowano skrypt dla biura podrozy Itaka")
 module.exports = {
     getOffers
 }

@@ -1,8 +1,7 @@
 const puppeteer = require('puppeteer')
 
-async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, order, results){
+async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [], adults = 1, kids = [], order = "dateAsc", results = 30){
     
-    console.log(`Showing ${results} results for:`)
     
     let url = "https://r.pl/szukaj?"
     
@@ -167,15 +166,7 @@ async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, ord
         url += _kids
     }
 
-    // if(transport==""){
-        // url += "&typTransportu=dowolny"
-    // }else if(transport=="AIR"){
-        url += "&typTransportu=AIR"
-    // }else if(transport=="BUS"){
-        // url += "&typTransportu=BUS"
-    // }else if(transport=="SELF"){
-        // url += "&typTransportu=SELF"
-    // }
+    url += "&typTransportu=AIR"
 
     if(order=="priceAsc"){
         url += "&sortowanie=cena-asc"
@@ -186,7 +177,7 @@ async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, ord
     }
 
     url += "&widok=list&dowolnaLiczbaPokoi=tak&cena=avg"
-    console.log(url)
+    // console.log(url)
 
     const browser = await puppeteer.launch({
         headless: false,
@@ -197,7 +188,7 @@ async function getOffers(dateFrom, dateTo, fromWhere, toWhere, adults, kids, ord
 
 }
 
-console.log("Zaimportowano skrypt dla biura podrozy Rainbow")
+// console.log("Zaimportowano skrypt dla biura podrozy Rainbow")
 module.exports = {
     getOffers
 }
