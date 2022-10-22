@@ -196,7 +196,7 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
                 const stars = el.querySelectorAll(".header_stars_link > span").length ? (el.querySelector(".header_stars_link > span").querySelectorAll(".star").length - (el.querySelector(".header_stars_link > span").querySelectorAll(".star_half").length/2)) : null;
                 properties.stars = stars;
 
-                const location = el.querySelector(".header_geo-labels").innerText || el.querySelector(".header_geo-labels").textContent;;
+                const location = el.querySelector(".header_geo-labels").innerText.toUpperCase() || el.querySelector(".header_geo-labels").textContent.toUpperCase();
                 properties.location = location;
 
                 const price = parseFloat(el.querySelector(".current-price_value").innerText.replace(" ",""));

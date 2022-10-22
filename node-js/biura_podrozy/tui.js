@@ -214,7 +214,12 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
                 const stars = el.querySelectorAll(".Rating_item__h0rsh").length ? el.querySelectorAll(".Rating_item__h0rsh").length : null;
                 properties.stars = stars;
 
-                const location = el.querySelector(".breadcrumbs__list").innerText || el.querySelector(".breadcrumbs__list").textContent;;
+                let locations = el.querySelector(".breadcrumbs__list").querySelectorAll(".breadcrumbs__item")
+                let toJoin = new Array()
+                for(let eel of locations){
+                    toJoin.push(eel.innerText)
+                }
+                const location = toJoin.join(' / ')
                 properties.location = location;
 
                 const price = parseFloat(el.querySelector(".price-value__amount").innerText.replace(" ",""));

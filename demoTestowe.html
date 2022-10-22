@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX test</title>
+    <style>
+        img{
+            width: 128px;
+            height: 96px;
+            object-fit: contain;
+            object-position: center;
+        }
+        table, td, th, tr{
+            border: 2px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+    <table id="oferty">
+        <tr>
+            <th>Obraz</th><th>Miejsce</th><th>Kiedy?</th><th>Cena</th>
+        </tr>
+    </table>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script>
+
+        var travelData = {"fromWhere":'EU'}
+        $.ajax({
+                url: "http://localhost:8888",
+                type: "GET",
+                data: travelData,
+                success: function (data) {
+                    let result = $.parseJSON(data)
+                    console.log(result)
+                    if(result.error){
+                        // obsługa błędu
+                        console.log(result.error)
+                    }else{
+                        console.log("Success!")
+                        for(let el of result){
+                            let options = {year: 'numeric', month: 'numeric', day: 'numeric'}
+                            $tr = $("<tr>")
+                            $tr.append(`<td><img src="${el.imageLink}"></td>`).append(`<td>${el.location}</td>`).append(`<td>${new Date(el.timeFrom).toLocaleString('pl-PL', options)}-${new Date(el.timeTo).toLocaleString('pl-PL',options)}</td>`).append(`<td>${el.price}zł/os</td>`)
+                            $('#oferty').append($tr)
+                        }   
+                    }
+                }
+            })
+    </script>
+</body>
+</html>
