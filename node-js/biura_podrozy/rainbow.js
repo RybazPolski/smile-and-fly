@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer')
-
+const utils = require('../utils')
 async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [], adults = 1, kids = [], order = "dateAsc", results = 30){
     
     
@@ -15,6 +15,9 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
     if(dateTo!=""){
         let _dateTo = new Date(dateTo);
         url += `&data=${_dateTo.getFullYear()}-${("0"+(_dateTo.getMonth()+1)).slice(-2)}-${("0"+_dateTo.getDate()).slice(-2)}`
+    }else{
+        let _dateFrom = new Date()
+        url += `&data=${_dateFrom.getFullYear()+1}-${("0"+(_dateFrom.getMonth()+1)).slice(-2)}-${("0"+_dateFrom.getDate()).slice(-2)}`
     }
     
     let startPoints = []
@@ -45,7 +48,7 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
                 }
         } 
     }
-    if(startPoints!=[]){
+    if(startPoints.length>0){
         url += "&wybraneSkad="+startPoints.join('&wybraneSkad=')
     }
 
@@ -145,7 +148,7 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
                 }
         }    
     }
-    if(destinations!=[]){
+    if(destinations.length>0){
         url += "&wybraneDokad="+destinations.join('&wybraneDokad=')
     }
 
@@ -155,7 +158,7 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
     }
     url += _adults
 
-    if(kids==[]){
+    if(kids.length==0){
         url += '&dzieci=nie'
     }else{
         let _kids = ""
@@ -180,11 +183,153 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
     // console.log(url)
 
     const browser = await puppeteer.launch({
-        headless: false,
+        // headless: false,
         defaultViewport: ''
     });
     const page = await browser.newPage();
     await page.goto(url);
+    
+    try{
+        await page.waitForSelector(".bloczek__container")
+    }catch(e){
+        return []
+    }
+
+
+    await utils.autoScroll(page);
+
+    while(await page.evaluate(_=>{return document.querySelectorAll('.bloczek__container').length}) < results){
+        await page.evaluate(_=>{
+            for(let el of document.querySelectorAll('.bloczek__container')){
+                el.classList.add('prepared')
+            }
+        })
+        if(await page.evaluate(_=>{return document.querySelectorAll('.pokaz-wiecej__icon').length==0})) break;false  
+        const moreButton = await page.$('.pokaz-wiecej__icon');
+        await moreButton.click();
+        // await page.evaluate(_=>{document.querySelector('.pokaz-wiecej__icon').dispatchEvent(new Event('click'))})
+        try{
+            await page.waitForSelector(".bloczek__container:not(.prepared)")
+        }catch(e){
+            console.log(e)
+            if(await page.evaluate(_=>{return document.querySelectorAll('.bloczek__container').length}) > 0){
+                break
+            }else{
+                return []
+            }
+        }
+        await utils.autoScroll(page)
+    }
+
+    const offers = (await page.$$eval(".bloczek__container", elements => {
+            return elements.map(el => {
+                const properties = {};
+                
+                properties.travelAgency = "Rainbow" 
+
+                try{
+                    const title = el.querySelector(".bloczek__tytul").innerText;
+                    properties.title = title;
+                }catch(e){
+                    properties.title = null
+                    console.log(e)
+                }
+                
+                try{
+                    const stars = el.querySelectorAll('.bloczek__sloneczka').length ? el.querySelector('.bloczek__sloneczka').dataset.rating : null;
+                    properties.stars = stars;
+                }catch(e){
+                    properties.stars = null
+                    console.log(e)
+                }
+
+
+                try{
+                    const location = el.querySelector(".bloczek__lokalizacja--text").innerText.split(' • ')[1].replace(':',' /').replace('-','/').toUpperCase()
+                    properties.location = location;
+                }catch(e){
+                    properties.location = null
+                    console.log(e)
+                }
+
+                try{
+                    const price = parseFloat(el.querySelector(".bloczek__cena").innerText.replace(" ",""));
+                    properties.price = price;
+                }catch(e){
+                    properties.price = null
+                    console.log(e)
+                }
+
+                try{
+                    const oldPrice = el.querySelector(".bloczek__cena-kreslona")==null ? null : parseFloat(el.querySelector(".bloczek__cena-kreslona").innerText.replace(" ",""))
+                    properties.oldPrice = oldPrice;
+                }catch(e){
+                    properties.oldPrice = null
+                    console.log(e)
+                }
+                
+                try{
+                    const params = el.querySelectorAll('.bloczek__parametr-text')
+                
+                    try{
+                        const dateFrom = params[0].innerText.split(' (')[0]
+                        const timeFrom = Date.parse(`${dateFrom.substring(6)}-${dateFrom.substring(3,5)}-${dateFrom.substring(0,2)}`)
+                        properties.timeFrom = timeFrom
+                        
+                        try{
+                            const duration = parseInt(params[0].innerText.split('(')[1])*24*60*60*1000
+                            const timeTo = timeFrom+duration
+                            properties.timeTo = timeTo
+                        }catch(e){
+                            properties.timeTo = null
+                            console.log(e)
+                        }
+                    }catch(e){
+                        properties.dateFrom = null
+                        properties.timeTo = null
+                        console.log(e)
+                    }
+                    
+                    try{
+                        const food = params[2].innerText
+                        properties.food = food
+                    }catch(e){
+                        properties.food = null
+                        console.log(e)
+                    }
+                    
+                }catch(e){
+                    properties.dateFrom = null
+                    properties.timeTo = null
+                    properties.food = null
+                    console.log(e)
+                }
+
+
+                try{
+                    const offerLink = el.querySelector(".bloczek__tytul").parentElement.href
+                    properties.offerLink = offerLink
+                }catch(e){
+                    properties.offerLink = null
+                    console.log(e)
+                }
+
+                try{
+                    const imageLink = el.querySelector(".bloczek__img").src || null
+                    properties.imageLink = imageLink
+                }catch(e){
+                    properties.imageLink = null
+                    console.log(e)
+                }
+
+                return properties;
+            });
+        }))
+
+        
+
+    browser.close()
+    return offers.slice(0,results)
 
 }
 

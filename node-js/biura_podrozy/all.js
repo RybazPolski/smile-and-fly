@@ -1,7 +1,7 @@
 const rainbow = require("./rainbow")
 const tui = require("./tui")
 const itaka = require("./itaka");
-
+const extend = require("node.extend")
 /**
  * @description Zwraca oferty wycieczek samolotem z biur podróży TUI i Itaka zgodnie z podanymi kryteriami
  * @param {String} dateFrom Od kiedy (yyyy-mm-dd)
@@ -15,19 +15,23 @@ const itaka = require("./itaka");
  * @returns {Array} Tablica obiektów
  * 
  */
-async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [], adults = 1, kids = [], order="dateAsc", results=30){
+async function getOffers(options){
+
+    let o = {dateFrom: "", dateTo: "", fromWhere: [], toWhere: [], adults: 1, kids: [], order: "dateAsc", results: 30}
+    extend(true,o,options)
     let res = await Promise.all([
-        tui.getOffers(dateFrom,dateTo,fromWhere,toWhere,adults,kids,order,Math.floor(results)),
-        itaka.getOffers(dateFrom,dateTo,fromWhere,toWhere,adults,kids,order,Math.ceil(results))
-    ])
-    res = [].concat(res[0],res[1]).sort()
-    switch(order){
+            tui.getOffers(o.dateFrom,o.dateTo,o.fromWhere,o.toWhere,o.adults,o.kids,o.order,o.results),
+          itaka.getOffers(o.dateFrom,o.dateTo,o.fromWhere,o.toWhere,o.adults,o.kids,o.order,o.results),
+        rainbow.getOffers(o.dateFrom,o.dateTo,o.fromWhere,o.toWhere,o.adults,o.kids,o.order,o.results)
+])
+    res = [].concat(res[0],res[1],res[2]).sort()
+    switch(o.order){
         case "dateAsc":
-            return res.sort((a, b) => (a.timeFrom < b.timeFrom) ? -1 : (a.timeFrom > b.timeFrom) ? 1 : 0).slice(0,results);
+            return res.sort((a, b) => (a.timeFrom < b.timeFrom) ? -1 : (a.timeFrom > b.timeFrom) ? 1 : 0).slice(0,o.results);
         case "priceDesc":
-            return res.sort((a, b) => (a.price < b.price) ? 1 : (a.price > b.price) ? -1 : 0).slice(0,results);
+            return res.sort((a, b) => (a.price < b.price) ? 1 : (a.price > b.price) ? -1 : 0).slice(0,o.results);
         case "priceAsc":
-            return res.sort((a, b) => (a.price < b.price) ? -1 : (a.price > b.price) ? 1 : 0).slice(0,results);
+            return res.sort((a, b) => (a.price < b.price) ? -1 : (a.price > b.price) ? 1 : 0).slice(0,o.results);
     }
 }
 /**
@@ -43,12 +47,16 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
  * @returns {Array} Tablica obiektów
  * 
  */
-async function testGetOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [], adults = 1, kids = [], order="dateAsc", results=30){
+async function testGetOffers(options){
+    let o = {dateFrom: "", dateTo: "", fromWhere: [], toWhere: [], adults: 1, kids: [], order: "dateAsc", results: 30}
+    extend(true,o,options)
     let diagStart = new Date();
-    tui.getOffers(dateFrom,dateTo,fromWhere,toWhere,adults,kids,order,Math.floor(results)).then(e=>{console.log(e);console.log(e.length);console.log("Query took "+(((new Date()).getTime()-diagStart.getTime())/1000)+" seconds")});
-    itaka.getOffers(dateFrom,dateTo,fromWhere,toWhere,adults,kids,order,Math.ceil(results)).then(e=>{console.log(e);console.log(e.length);console.log("Query took "+(((new Date()).getTime()-diagStart.getTime())/1000)+" seconds")});
+        tui.getOffers(o.dateFrom,o.dateTo,o.fromWhere,o.toWhere,o.adults,o.kids,o.order,o.results).then(e=>{console.log(e);console.log(e.length);console.log("Query took "+(((new Date()).getTime()-diagStart.getTime())/1000)+" seconds")});
+      itaka.getOffers(o.dateFrom,o.dateTo,o.fromWhere,o.toWhere,o.adults,o.kids,o.order,o.results).then(e=>{console.log(e);console.log(e.length);console.log("Query took "+(((new Date()).getTime()-diagStart.getTime())/1000)+" seconds")});
+    rainbow.getOffers(o.dateFrom,o.dateTo,o.fromWhere,o.toWhere,o.adults,o.kids,o.order,o.results).then(e=>{console.log(e);console.log(e.length);console.log("Query took "+(((new Date()).getTime()-diagStart.getTime())/1000)+" seconds")});
 }
 
+
 module.exports = {
-    getOffers, testGetOffers, tui, itaka 
+    getOffers, testGetOffers, tui, itaka, rainbow
 }

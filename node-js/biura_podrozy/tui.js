@@ -184,7 +184,10 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
         document.querySelector(".cookies-bar__button--accept").click()
     })
 
-    if(!(await page.waitForSelector(".offer-tile-wrapper"))){
+
+    try{
+        await page.waitForSelector(".offer-tile-wrapper")
+    }catch(e){
         return []
     }
 
@@ -198,7 +201,16 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
         })
         if(await page.evaluate(_=>{return document.querySelectorAll('.results-container__button').length==0})) break;false        
         await page.evaluate(_=>{document.querySelector(".results-container__button").click()})
-        await page.waitForSelector(".offer-tile-wrapper:not(.prepared)")
+        try{
+            await page.waitForSelector(".offer-tile-wrapper:not(.prepared)")
+        }catch(e){
+            console.log(e)
+            if(await page.evaluate(_=>{return document.querySelectorAll('.offer-tile-wrapper').length}) > 0){
+                break
+            }else{
+                return []
+            }
+        }
         await utils.autoScroll(page)
     }
 
@@ -208,44 +220,96 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
                 
                 properties.travelAgency = "TUI" 
 
-                const title = el.querySelector(".offer-tile-body__hotel-name").innerHTML;
-                properties.title = title;
-                
-                const stars = el.querySelectorAll(".Rating_item__h0rsh").length ? el.querySelectorAll(".Rating_item__h0rsh").length : null;
-                properties.stars = stars;
-
-                let locations = el.querySelector(".breadcrumbs__list").querySelectorAll(".breadcrumbs__item")
-                let toJoin = new Array()
-                for(let eel of locations){
-                    toJoin.push(eel.innerText)
+                try{
+                    const title = el.querySelector(".offer-tile-body__hotel-name").innerHTML;
+                    properties.title = title;
+                }catch(e){
+                    properties.title = null
+                    console.log(e)
                 }
-                const location = toJoin.join(' / ')
-                properties.location = location;
+                
+                try{
+                    const stars = el.querySelectorAll(".Rating_item__h0rsh").length ? el.querySelectorAll(".Rating_item__h0rsh").length : null;
+                    properties.stars = stars;
+                }catch(e){
+                    properties.stars = null
+                    console.log(e)
+                }
 
-                const price = parseFloat(el.querySelector(".price-value__amount").innerText.replace(" ",""));
-                properties.price = price;
+                try{
+                    let locations = el.querySelector(".breadcrumbs__list").querySelectorAll(".breadcrumbs__item")
+                    let toJoin = new Array()
+                    for(let eel of locations){
+                        toJoin.push(eel.innerText)
+                    }
+                    const location = toJoin.join(' / ')
+                    properties.location = location;
+                }catch(e){
+                    properties.location = null
+                    console.log(e)
+                }
 
-                const oldPrice = null
-                properties.oldPrice = oldPrice;
+                try{
+                    const price = parseFloat(el.querySelector(".price-value__amount").innerText.replace(" ",""));
+                    properties.price = price;
+                }catch(e){
+                    properties.price = null
+                    console.log(e)
+                }
 
-                const dates = el.querySelector("[data-testid=offer-tile-departure-date]").innerText.split(" (")[0].split(" - ")
-                const dateFrom = dates[0]
-                const dateTo = dates[1]
-                const timeFrom = Date.parse(`${dateFrom.substring(6)}-${dateFrom.substring(3,5)}-${dateFrom.substring(0,2)}`)
-                const timeTo = Date.parse(`${dateTo.substring(6)}-${dateTo.substring(3,5)}-${dateTo.substring(0,2)}`)
-                properties.timeFrom = timeFrom
-                properties.timeTo = timeTo
+                try{
+                    const oldPrice = null
+                    properties.oldPrice = oldPrice;
+                }catch(e){
+                    properties.oldPrice = null
+                    console.log(e)
+                }
 
-                const food = el.querySelector("[data-testid=offer-tile-boardType]").innerText
-                properties.food = food
+                try{
+                    const dates = el.querySelector("[data-testid=offer-tile-departure-date]").innerText.split(" (")[0].split(" - ")
+                    try{
+                        const dateFrom = dates[0]
+                        const timeFrom = Date.parse(`${dateFrom.substring(6)}-${dateFrom.substring(3,5)}-${dateFrom.substring(0,2)}`)
+                        properties.timeFrom = timeFrom
+                    }catch(e){
+                        properties.timeFrom = null
+                        console.log(e)
+                    }
+                    try{
+                        const dateTo = dates[1]
+                        const timeTo = Date.parse(`${dateTo.substring(6)}-${dateTo.substring(3,5)}-${dateTo.substring(0,2)}`)
+                        properties.timeTo = timeTo
+                    }catch(e){
+                        properties.timeTo = null
+                        console.log(e)
+                    }
+                }catch(e){
+                    properties.dateFrom = null
+                    properties.dateTo = null
+                    console.log(e)
+                }
 
-                const offerLink = el.querySelector(".offer-tile-body__title > a").href
-                properties.offerLink = offerLink
+                try{
+                    const food = el.querySelector("[data-testid=offer-tile-boardType]").innerText
+                    properties.food = food
+                }catch(e){
+                    properties.food = null
+                    console.log(e)
+                }
 
+                try{
+                    const offerLink = el.querySelector(".offer-tile-body__title > a").href
+                    properties.offerLink = offerLink
+                }catch(e){
+                    properties.offerLink = null
+                    console.log(e)
+                }
+                
                 try{
                     const imageLink = el.querySelector(".CarouselNew_carousel__WqEi_").querySelector('img').src || null
                     properties.imageLink = imageLink
                 }catch(e){
+                    properties.imageLink = null
                     console.log(e)
                 }
 

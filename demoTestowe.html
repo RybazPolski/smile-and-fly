@@ -27,7 +27,7 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <script>
 
-        var travelData = {"fromWhere":'EU'}
+        var travelData = {"fromWhere":'WAW',"toWhere":["his"],'results':10}
         $.ajax({
                 url: "http://localhost:8888",
                 type: "GET",
@@ -43,7 +43,7 @@
                         for(let el of result){
                             let options = {year: 'numeric', month: 'numeric', day: 'numeric'}
                             $tr = $("<tr>")
-                            $tr.append(`<td><img src="${el.imageLink}"></td>`).append(`<td>${el.location}</td>`).append(`<td>${new Date(el.timeFrom).toLocaleString('pl-PL', options)}-${new Date(el.timeTo).toLocaleString('pl-PL',options)}</td>`).append(`<td>${el.price}zł/os</td>`)
+                            $tr.append(`<td><a href="${el.offerLink}""><img src="${el.imageLink}"></td>`).append(`<td>${el.location}</td>`).append(`<td>${new Date(el.timeFrom).toLocaleString('pl-PL', options)}-${new Date(el.timeTo).toLocaleString('pl-PL',options)}</td>`).append(`<td>${el.price}zł/os</td>`)
                             $('#oferty').append($tr)
                         }   
                     }

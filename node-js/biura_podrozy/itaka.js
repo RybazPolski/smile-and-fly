@@ -161,12 +161,17 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
     const page = await browser.newPage();
     await page.goto(url);
 
-    await page.waitForSelector(".details_save--1ja7w")
-    page.evaluate(_ => {
-        document.querySelector(".details_save--1ja7w").click()
-    })
+    try{
+        await page.waitForSelector(".details_save--1ja7w")
+        page.evaluate(_ => {
+            document.querySelector(".details_save--1ja7w").click()
+        })
+    }catch(e){
+    }
 
-    if(!(await page.waitForSelector(".offer"))){
+    try{
+        await page.waitForSelector(".offer")
+    }catch(e){
         return []
     }
 
@@ -180,7 +185,16 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
         })
         if(await page.evaluate(_=>{return document.querySelectorAll('.offer-list_more-offers').length==0})) break;false        
         await page.evaluate(_=>{document.querySelector(".offer-list_more-offers").click()})
-        await page.waitForSelector(".offer:not(.prepared)")
+        try{
+            await page.waitForSelector(".offer:not(.prepared)")
+        }catch(e){
+            console.log(e)
+            if(await page.evaluate(_=>{return document.querySelectorAll('.offer').length}) > 0){
+                break
+            }else{
+                return []
+            }
+        }
         await utils.autoScroll(page)
     }
 
@@ -190,39 +204,93 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
                 
                 properties.travelAgency = "Itaka" 
 
-                const title = el.querySelector(".header_title > a").innerHTML;
-                properties.title = title;
+                try{
+                    const title = el.querySelector(".header_title > a").innerHTML;
+                    properties.title = title;
+                }catch(e){
+                    properties.title = null
+                    console.log(e)
+                }
                 
-                const stars = el.querySelectorAll(".header_stars_link > span").length ? (el.querySelector(".header_stars_link > span").querySelectorAll(".star").length - (el.querySelector(".header_stars_link > span").querySelectorAll(".star_half").length/2)) : null;
-                properties.stars = stars;
+                try{
+                    const stars = el.querySelectorAll(".header_stars_link > span").length ? (el.querySelector(".header_stars_link > span").querySelectorAll(".star").length - (el.querySelector(".header_stars_link > span").querySelectorAll(".star_half").length/2)) : null;
+                    properties.stars = stars;
+                }catch(e){
+                    properties.stars = null
+                    console.log(e)
+                }
 
-                const location = el.querySelector(".header_geo-labels").innerText.toUpperCase() || el.querySelector(".header_geo-labels").textContent.toUpperCase();
-                properties.location = location;
+                try{
+                    const location = el.querySelector(".header_geo-labels").innerText.toUpperCase()
+                    properties.location = location;
+                }catch(e){
+                    properties.location = null
+                    console.log(e)
+                }
 
-                const price = parseFloat(el.querySelector(".current-price_value").innerText.replace(" ",""));
-                properties.price = price;
+                try{
+                    const price = parseFloat(el.querySelector(".current-price_value").innerText.replace(" ",""));
+                    properties.price = price;
+                }catch(e){
+                    properties.price = null
+                    console.log(e)
+                }
 
-                const oldPrice = el.querySelector(".old-price_value")==null ? null : parseFloat(el.querySelector(".old-price_value").innerText.replace(" ",""))
-                properties.oldPrice = oldPrice;
+                try{
+                    const oldPrice = el.querySelector(".old-price_value")==null ? null : parseFloat(el.querySelector(".old-price_value").innerText.replace(" ",""))
+                    properties.oldPrice = oldPrice;
+                }catch(e){
+                    properties.oldPrice = null
+                    console.log(e)
+                }
 
-                const dates = el.querySelector(".offer_date > .offer_date_icon-container + span").innerText.split(" (")[0].split("-")
-                const dateFrom = dates[0].length==5?dates[0]+=dates[1].substring(5):dates[0]
-                const dateTo = dates[1]
-                const timeFrom = Date.parse(`20${dateFrom.substring(6)}-${dateFrom.substring(3,5)}-${dateFrom.substring(0,2)}`)
-                const timeTo = Date.parse(`20${dateTo.substring(6)}-${dateTo.substring(3,5)}-${dateTo.substring(0,2)}`)
-                properties.timeFrom = timeFrom
-                properties.timeTo = timeTo
+                try{
+                    const dates = el.querySelector(".offer_date > .offer_date_icon-container + span").innerText.split(" (")[0].split("-")
+                    
+                    try{
+                        const dateFrom = dates[0].length==5?dates[0]+=dates[1].substring(5):dates[0]
+                        const timeFrom = Date.parse(`20${dateFrom.substring(6)}-${dateFrom.substring(3,5)}-${dateFrom.substring(0,2)}`)
+                        properties.timeFrom = timeFrom
+                    }catch(e){
+                        properties.timeFrom = null
+                        console.log(e)
+                    }
+                    
+                    try{
+                        const dateTo = dates[1]
+                        const timeTo = Date.parse(`20${dateTo.substring(6)}-${dateTo.substring(3,5)}-${dateTo.substring(0,2)}`)
+                        properties.timeTo = timeTo
+                    }catch(e){
+                        properties.timeTo = null
+                        console.log(e)
+                    }
+                }catch(e){
+                    properties.timeFrom = null
+                    properties.timeTo = null
+                    console.log(e)
+                }
 
-                const food = el.querySelector(".offer_food").innerText
-                properties.food = food
+                try{
+                    const food = el.querySelector(".offer_food").innerText
+                    properties.food = food
+                }catch(e){
+                    properties.food = null
+                    console.log(e)
+                }
 
-                const offerLink = el.querySelector(".offer_link").href
-                properties.offerLink = offerLink
+                try{
+                    const offerLink = el.querySelector(".offer_link").href
+                    properties.offerLink = offerLink
+                }catch(e){
+                    properties.offerLink = null
+                    console.log(e)
+                }
 
                 try{
                     const imageLink = el.querySelector(".figure_main-photo").src || el.querySelector(".item_photo-img").src || null
                     properties.imageLink = imageLink
                 }catch(e){
+                    properties.imageLink = null
                     console.log(e)
                 }
 

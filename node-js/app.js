@@ -1,7 +1,7 @@
 const smileAndFly = require('./biura_podrozy/all')
 
 const express = require('express')
-const port = 8888
+const port = process.env.PORT || 8888
 
 const app = express()
 
@@ -15,7 +15,12 @@ app.use(cors(corsOptions));
 
 app.get('/', function (req, res){
     q = req.query
-    smileAndFly.getOffers(/*q.dateFrom,q.dateTo,q.fromWhere,q.toWhere,q.adults,q.kids,q.order,q.results*/).then(e=>{res.send(JSON.stringify(e))})
+    try{
+        smileAndFly.getOffers(q).then(e=>{res.send(JSON.stringify(e))})
+    }catch(e){
+        console.log(e)
+        res.send(JSON.stringify({'error': 'unable to fetch offers'}))
+    }
 })
 
 app.listen(port)

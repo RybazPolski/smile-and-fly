@@ -19,8 +19,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "jquery": "^3.6.1",
     "jsdom": "^20.0.1",
+    "node.extend": "^2.0.2",
     "puppeteer": "^18.0.5"
   }
 }
