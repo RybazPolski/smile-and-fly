@@ -173,8 +173,9 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
     // console.log(url)
 
     const browser = await puppeteer.launch({
-        // headless: false,
-        defaultViewport: ''
+        headless: true,
+        defaultViewport: '',
+        args: ['--no-sandbox','--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
     await page.goto(url);
