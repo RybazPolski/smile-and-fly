@@ -1,4 +1,78 @@
 # Wyszukiwarka ofert poprzez biura podróży - bot zdalny
+## Jak postawić serwer?
+### Windows / Linux
+Klonowanie repozytorium
+```console
+git clone https://github.com/julianrybarczyk/smile-and-fly
+```
+
+Instalacja node-modules
+```console
+cd <SciezkaDoSklonowanegoRepo>/node-js
+npm i
+```
+
+Uruchomienie serwera
+```console
+cd <SciezkaDoSklonowanegoRepo>/node-js
+node app.js
+```
+Jeżeli serwer po uruchomieniu nie działa, należy znaleźć rozwiązanie pod adresem https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md 
+
+---
+## Jak korzystać z API?
+### AJAX
+```js
+var travelData = //zmienna dla opcji (wszystkie są opcjonalne, poniżej zaprezentowano domyślne.) 
+{ 
+  dateFrom: "", //Od kiedy? || data w formacie yyyy-mm-dd (pusta - dowolne)
+  dateTo: "", //Do kiedy? || data w formacie yyyy-mm-dd (pusta - dowolne)
+  fromWhere: [], //Skąd? || tablica kodów lotnisk, wymienionych poniżej (puste - dowolne)
+  toWhere: [], //Dokąd? || tablica kodów państw i regionów, wymienionych poniżej (puste - dowolne)
+  adults: 1, //Ilość dorosłych || liczba całkowita
+  kids: [], //Daty urodzenia dzieci || tablica dat urodzenia każdego z dzieci, w formacie yyyy-mm-dd (np. dla 2 dzieci podajemy 2 daty.)
+  order:"dateAsc", //Sortowanie || dateAsc - najbliższa data; priceAsc - cena rosnąco; priceDesc - cena malejąco
+  results:30 //Ilość wyników jakie chcemy uzyskać || liczba całkowita (Pamiętaj - w zależności od ilości wyników, czas zbierania ofert może się wydłużyć.)
+}
+
+$.ajax({
+      url: "http://localhost:8888", //adres uruchomionego API
+      type: "GET",
+      data: travelData,
+      success: function (data) {
+          let result = $.parseJSON(data)
+          console.log(result)
+          if(result.error){
+              // obsługa błędu
+              console.log(result.error)
+          }else{
+              //obsługa uzyskanych wyników
+              console.log("Success!")
+          }
+      }
+})
+```
+
+Przykładowy **result**:
+```js
+[
+  {
+      "travelAgency": "TUI",
+      "title": "Villa Rustica Dalmatia",
+      "stars": 4,
+      "location": "CHORWACJA / DALMACJA ŚRODKOWA / SEGET VRANJICA",
+      "price": 326345,
+      "oldPrice": null,
+      "timeFrom": 1685577600000,
+      "timeTo": 1686182400000,
+      "food": "Śniadanie",
+      "offerLink": "https://www.tui.pl/wypoczynek/chorwacja/dalmacja-srodkowa/villa-rustica-dalmatia-spu23001/OfferCodeWS/WAWSPU20230601104020230601202306081330L07SPU23001YGRGA01ROGYGRA01",
+      "imageLink": "https://r.cdn.redgalaxy.com/scale/o2/TUI/hotels/SPU23001/S22/19348639.jpg?dstw=1200&dsth=1191.044776119403&srcw=268&srch=266&srcx=1%2F2&srcy=1%2F2&srcmode=3&type=1&quality=80"
+  },
+  ... //pozostałe elementy
+]
+```
+
 ---
 ### Kody polskich lotnisk wylotu:
 | LOTNISKO          | KOD |
