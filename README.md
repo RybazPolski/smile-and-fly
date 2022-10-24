@@ -53,6 +53,26 @@ $.ajax({
 })
 ```
 
+Przykładowy **result**:
+```js
+[
+  {
+      "travelAgency": "TUI",
+      "title": "Villa Rustica Dalmatia",
+      "stars": 4,
+      "location": "CHORWACJA / DALMACJA ŚRODKOWA / SEGET VRANJICA",
+      "price": 326345,
+      "oldPrice": null,
+      "timeFrom": 1685577600000,
+      "timeTo": 1686182400000,
+      "food": "Śniadanie",
+      "offerLink": "https://www.tui.pl/wypoczynek/chorwacja/dalmacja-srodkowa/villa-rustica-dalmatia-spu23001/OfferCodeWS/WAWSPU20230601104020230601202306081330L07SPU23001YGRGA01ROGYGRA01",
+      "imageLink": "https://r.cdn.redgalaxy.com/scale/o2/TUI/hotels/SPU23001/S22/19348639.jpg?dstw=1200&dsth=1191.044776119403&srcw=268&srch=266&srcx=1%2F2&srcy=1%2F2&srcmode=3&type=1&quality=80"
+  },
+  ... //pozostałe elementy
+]
+```
+
 ---
 ### Kody polskich lotnisk wylotu:
 | LOTNISKO          | KOD |
