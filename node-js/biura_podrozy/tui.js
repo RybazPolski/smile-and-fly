@@ -14,7 +14,7 @@ const utils = require('../utils')
  * @returns {Array} Tablica obiektów
  * 
  */
-async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [], adults = 1, kids = [], order = "dateAsc", results = 30){
+async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [], adults = 1, kids = [], order = "dateAsc", results = 30, ip){
 
     url = "https://www.tui.pl/wypoczynek/wyniki-wyszukiwania-samolot?q="
 
@@ -170,7 +170,8 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
     url += ":tripType:WS"
 
     url += "&fullPrice=false"
-    // console.log(url)
+    
+    console.log(`[For: ${ip}] TUI url generated.`)
 
     const browser = await puppeteer.launch({
         headless: true,
@@ -180,6 +181,8 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
     const page = await browser.newPage();
     await page.goto(url);
     
+    console.log(`[For: ${ip}] Getting TUI offers.`)
+
     await page.waitForSelector(".cookies-bar__button--accept")
     page.evaluate(_ => {
         document.querySelector(".cookies-bar__button--accept").click()
@@ -189,6 +192,7 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
     try{
         await page.waitForSelector(".offer-tile-wrapper")
     }catch(e){
+        console.log(`[For: ${ip}] TUI found 0 offers.`)
         return []
     }
 
@@ -209,12 +213,14 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
             if(await page.evaluate(_=>{return document.querySelectorAll('.offer-tile-wrapper').length}) > 0){
                 break
             }else{
+                console.log(`[For: ${ip}] TUI found 0 offers.`)
                 return []
             }
         }
         await utils.autoScroll(page)
     }
 
+    console.log(`[For: ${ip}] Preparing TUI offers.`)
     const offers = (await page.$$eval(".offer-tile-wrapper", elements => {
             return elements.map(el => {
                 const properties = {};
@@ -321,6 +327,7 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
         
 
     browser.close()
+    console.log(`[For: ${ip}] TUI found ${offers.slice(0,results).length} offers.`)
     return offers.slice(0,results)
  
 }

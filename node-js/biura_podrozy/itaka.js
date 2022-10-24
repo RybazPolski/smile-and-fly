@@ -16,7 +16,7 @@ const utils = require('../utils')
  * @returns {Array} Tablica obiektów
  * 
  */
-async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [], adults = 1, kids = [], order = "dateAsc", results = 30){
+async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [], adults = 1, kids = [], order = "dateAsc", results = 30, ip){
     
     let url = "https://www.itaka.pl/wyniki-wyszukiwania/wakacje/?view=offerList"
 
@@ -153,6 +153,8 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
     }
 
     // console.log(url)
+    console.log(`[For: ${ip}] Itaka url generated.`)
+
 
     const browser = await puppeteer.launch({
         headless: true,
@@ -161,6 +163,8 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
     });
     const page = await browser.newPage();
     await page.goto(url);
+
+    console.log(`[For: ${ip}] Getting Itaka offers.`)
 
     try{
         await page.waitForSelector(".details_save--1ja7w")
@@ -173,6 +177,7 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
     try{
         await page.waitForSelector(".offer")
     }catch(e){
+        console.log(`[For: ${ip}] Itaka found 0 offers.`)
         return []
     }
 
@@ -193,12 +198,14 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
             if(await page.evaluate(_=>{return document.querySelectorAll('.offer').length}) > 0){
                 break
             }else{
+                console.log(`[For: ${ip}] Itaka found 0 offers.`)
                 return []
             }
         }
         await utils.autoScroll(page)
     }
 
+    console.log(`[For: ${ip}] Preparing Itaka offers.`)
     const offers = (await page.$$eval(".offer", elements => {
             return elements.map(el => {
                 const properties = {};
@@ -302,6 +309,7 @@ async function getOffers(dateFrom = "", dateTo = "", fromWhere = [], toWhere = [
         
 
     browser.close()
+    console.log(`[For: ${ip}] Itaka found ${offers.slice(0,results).length} offers.`)
     return offers.slice(0,results)
 }
 

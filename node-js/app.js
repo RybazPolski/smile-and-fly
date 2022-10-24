@@ -16,7 +16,7 @@ app.use(cors(corsOptions));
 app.get('/', function (req, res){
     q = req.query
     try{
-        smileAndFly.getOffers(q).then(e=>{res.send(JSON.stringify(e))})
+        smileAndFly.getOffers(q,req.headers['x-forwarded-for']||req.socket.remoteAddress).then(e=>{res.send(JSON.stringify(e))})
     }catch(e){
         console.log(e)
         res.send(JSON.stringify({'error': 'unable to fetch offers'}))

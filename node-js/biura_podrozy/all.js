@@ -15,24 +15,30 @@ const extend = require("node.extend")
  * @returns {Array} Tablica obiektów
  * 
  */
-async function getOffers(options){
+async function getOffers(options, ip="unknown"){
 
     let o = {dateFrom: "", dateTo: "", fromWhere: [], toWhere: [], adults: 1, kids: [], order: "dateAsc", results: 30}
     extend(true,o,options)
     let res = await Promise.all([
-            tui.getOffers(o.dateFrom,o.dateTo,o.fromWhere,o.toWhere,o.adults,o.kids,o.order,o.results),
-          itaka.getOffers(o.dateFrom,o.dateTo,o.fromWhere,o.toWhere,o.adults,o.kids,o.order,o.results),
-        rainbow.getOffers(o.dateFrom,o.dateTo,o.fromWhere,o.toWhere,o.adults,o.kids,o.order,o.results)
+            tui.getOffers(o.dateFrom,o.dateTo,o.fromWhere,o.toWhere,o.adults,o.kids,o.order,o.results,ip),
+          itaka.getOffers(o.dateFrom,o.dateTo,o.fromWhere,o.toWhere,o.adults,o.kids,o.order,o.results, ip),
+        rainbow.getOffers(o.dateFrom,o.dateTo,o.fromWhere,o.toWhere,o.adults,o.kids,o.order,o.results, ip)
 ])
     res = [].concat(res[0],res[1],res[2]).sort()
     switch(o.order){
         case "dateAsc":
-            return res.sort((a, b) => (a.timeFrom < b.timeFrom) ? -1 : (a.timeFrom > b.timeFrom) ? 1 : 0).slice(0,o.results);
+            res = res.sort((a, b) => (a.timeFrom < b.timeFrom) ? -1 : (a.timeFrom > b.timeFrom) ? 1 : 0).slice(0,o.results);
+            break;
         case "priceDesc":
-            return res.sort((a, b) => (a.price < b.price) ? 1 : (a.price > b.price) ? -1 : 0).slice(0,o.results);
+            res = res.sort((a, b) => (a.price < b.price) ? 1 : (a.price > b.price) ? -1 : 0).slice(0,o.results);
+            break;
         case "priceAsc":
-            return res.sort((a, b) => (a.price < b.price) ? -1 : (a.price > b.price) ? 1 : 0).slice(0,o.results);
-    }
+            res = res.sort((a, b) => (a.price < b.price) ? -1 : (a.price > b.price) ? 1 : 0).slice(0,o.results);
+            break;
+        }
+        console.log(`[For: ${ip}] Best ${res.length} results sorted.`)
+        console.log(`[For: ${ip}] Done!`)
+        return res;
 }
 /**
  * @description Wyświetla oferty wycieczek samolotem z biur podróży TUI i Itaka zgodnie z podanymi kryteriami w konsoli oraz podaje czas zbierania danych
