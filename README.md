@@ -1,4 +1,58 @@
 # Wyszukiwarka ofert poprzez biura podróży - bot zdalny
+## Jak postawić serwer?
+### Windows / Linux
+Klonowanie repozytorium
+```console
+git clone https://github.com/julianrybarczyk/smile-and-fly
+```
+
+Instalacja node-modules
+```console
+cd <SciezkaDoSklonowanegoRepo>/node-js
+npm i
+```
+
+Uruchomienie serwera
+```console
+cd <SciezkaDoSklonowanegoRepo>/node-js
+node app.js
+```
+Jeżeli serwer po uruchomieniu nie działa, należy znaleźć rozwiązanie pod adresem https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md 
+
+---
+## Jak korzystać z API?
+### AJAX
+```js
+var travelData = //zmienna dla opcji (wszystkie są opcjonalne, poniżej zaprezentowano domyślne.) 
+{ 
+  dateFrom: "", //Od kiedy? || data w formacie yyyy-mm-dd (pusta - dowolne)
+  dateTo: "", //Do kiedy? || data w formacie yyyy-mm-dd (pusta - dowolne)
+  fromWhere: [], //Skąd? || tablica kodów lotnisk, wymienionych poniżej (puste - dowolne)
+  toWhere: [], //Dokąd? || tablica kodów państw i regionów, wymienionych poniżej (puste - dowolne)
+  adults: 1, //Ilość dorosłych || liczba całkowita
+  kids: [], //Daty urodzenia dzieci || tablica dat urodzenia każdego z dzieci, w formacie yyyy-mm-dd (np. dla 2 dzieci podajemy 2 daty.)
+  order:"dateAsc", //Sortowanie || dateAsc - najbliższa data; priceAsc - cena rosnąco; priceDesc - cena malejąco
+  results:30 //Ilość wyników jakie chcemy uzyskać || liczba całkowita (Pamiętaj - w zależności od ilości wyników, czas zbierania ofert może się wydłużyć.)
+}
+
+$.ajax({
+      url: "http://localhost:8888", //adres uruchomionego API
+      type: "GET",
+      data: travelData,
+      success: function (data) {
+          let result = $.parseJSON(data)
+          console.log(result)
+          if(result.error){
+              // obsługa błędu
+              console.log(result.error)
+          }else{
+              //obsługa uzyskanych wyników
+              console.log("Success!")
+          }
+      }
+})
+```
+
 ---
 ### Kody polskich lotnisk wylotu:
 | LOTNISKO          | KOD |
