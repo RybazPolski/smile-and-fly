@@ -17,6 +17,7 @@ Uruchomienie serwera
 cd <SciezkaDoSklonowanegoRepo>/node-js
 node app.js
 ```
+Domyślny port serwera to :8888, jednak można go zmienić w skrypcie node-js/app.js
 Jeżeli serwer po uruchomieniu nie działa, należy znaleźć rozwiązanie pod adresem https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md 
 
 ---
