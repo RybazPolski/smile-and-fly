@@ -27,8 +27,9 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <script>
 
-        var travelData = {"fromWhere":'WAW',"toWhere":["his"],'results':10}
+        var travelData = {'results':60}
         $.ajax({
+                // url: "https://smile-and-fly.herokuapp.com",
                 url: "http://localhost:8888",
                 type: "GET",
                 data: travelData,
