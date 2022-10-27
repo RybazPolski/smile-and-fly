@@ -1,93 +1,106 @@
+
+
 .formularz {
-    width: 300px;
-    padding: 10%;
-    margin-left: 5%;
-    background: #ffffff;
-    border-radius: 40px 40px 40px 40px;
-    box-shadow: inset 0 0 2em gold, 0 0 1em rgb(62, 62, 62);
-    display: block;
-  }
+  width: 300px;
+  padding: 10%;
+  margin-left: 5%;
+  background: #ffffff;
+  border-radius: 40px 40px 40px 40px;
+  box-shadow: inset 0 0 2em gold, 0 0 1em rgb(62, 62, 62);
+  display: block;
+}
 
-  .formularz input,
-  select {
-    border: 0;
-    background: none;
-    display: block;
-    border: 2px solid #000000;
-    padding: 4px 1px;
-    width: 300px;
-    color: rgb(0, 0, 0);
-    border-radius: 24px;
-    transition: 0.25s;
-    text-align: center;
-  }
+.formularz input, select {
+  border: 0;
+  display: block;
+  border: 2px solid #000000;
+  padding: 4px 1px;
+  width: 300px;
+  color: rgb(0, 0, 0);
+  border-radius: 24px;
+  transition: 0.25s;
+  text-align: center;
+}
+.formularz:not(.searchButt){
+  background: none;
+}
+input:hover:not(.searchButt), select:hover {
+  background-color: rgb(255, 247, 129);
+}
 
-  input:hover,
-  select:hover {
-    background-color: rgb(255, 247, 129);
-  }
+.header {
+  display: inline-block;
+  text-align: center;
+  width: 450px;
+  height: 200px;
+  object-fit: cover;
+  object-position: 0px -75px;
+}
 
-  .header {
-    display: inline-block;
-    text-align: center;
-    width: 450px;
-    height: 200px;
-    object-fit: cover;
-    object-position: 0px -75px;
-  }
+.oferty {
+  display: inline-block;
+  margin-left: 5%;
+  overflow-y: scroll;
+  height: 875px;
+  width: 51vw
+}
 
-  .oferty {
-    display: inline-block;
-    margin-left: 5%;
-    overflow-y: scroll;
-    height: 875px;
-    width: 51vw
-  }
+.oferta{
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: inset 0 0 2em rgb(123, 123, 123);
+  margin-bottom: 2.5%;
+  width: 50vw;
+}
+.oferta div{
+  border: 1.5px dashed gray;
+}
+.oferta tr #zdjecie{
+  width: 20vw;
+  height: 15vw;
+  display: inline-block;
+}
+.oferta tr #zdjecie img{
+  height: 100%;
+  width: 100%;
+  object-position: center;
+  object-fit: cover;
+  border-radius: 10px 10px 10px 10px;
+}
+.oferta tr .szczegoly{
+  display: inline-block;
+  width: 27.5vw;
+  padding-left: 1.5vw;
+}
+.oferta tr .ceny{
+  display: block;
+  width: 27.5vw;
+  text-align: right;
+  margin-left: auto; 
+  margin-right: 0;
+  padding-right: 1.5vw;
+  padding-bottom: 1vw;
+}
+#button{
+  border-radius: 50px 50px 50px 50px;
+  background-color: gold;
+}
+#button:hover{
+  background-color: #000000;
+  color: gold;
+}
+body{
+  font-family: 'Century Gothic';
+}
 
-  .oferta{
-      border-radius: 10px 10px 10px 10px;
-      box-shadow: inset 0 0 2em rgb(123, 123, 123);
-      margin-bottom: 2.5%;
-      width: 50vw;
-  }
-  .oferta div{
-      border: 1.5px dashed gray;
-  }
-  .oferta tr #zdjecie{
-      width: 20vw;
-      height: 15vw;
-      display: inline-block;
-  }
-  .oferta tr #zdjecie img{
-      height: 100%;
-      width: 100%;
-      object-position: center;
-      object-fit: cover;
-      border-radius: 10px 10px 10px 10px;
-  }
-  .oferta tr .szczegoly{
-      display: inline-block;
-      width: 27.5vw;
-      padding-left: 1.5vw;
-  }
-  .oferta tr .ceny{
-      display: block;
-      width: 27.5vw;
-      text-align: right;
-      margin-left: auto; 
-      margin-right: 0;
-      padding-right: 1.5vw;
-      padding-bottom: 1vw;
-  }
-  #button{
-    border-radius: 50px 50px 50px 50px;
-    
-    background-color: gold;
-  }
-  #button:hover{
-    background-color: #000000;
-    color: gold;
-  }
-  body{
-    font-family: 'Century Gothic';
-  }
+.searchButt{
+  background-color: #00c7da; 
+  background: #00c7da;
+  height: 2vw; 
+  font-size: 1vw;
+}
+.searchButt:hover{
+  background-color: #00eaff;
+}
+.searchButt:active{
+  color: white;
+}
