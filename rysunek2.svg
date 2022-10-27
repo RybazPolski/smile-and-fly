@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="rysunek2.png.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:snap-to-guides="true"
+     inkscape:zoom="1.28"
+     inkscape:cx="399.60938"
+     inkscape:cy="354.29688"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <rect
+       x="102.34375"
+       y="296.09375"
+       width="685.15625"
+       height="281.25"
+       id="rect35672" />
+    <rect
+       x="309.09962"
+       y="437.89113"
+       width="418.91133"
+       height="130.14721"
+       id="rect16686" />
+    <rect
+       x="36.603903"
+       y="364.68333"
+       width="772.74905"
+       height="386.37453"
+       id="rect3686" />
+  </defs>
+  <g
+     inkscape:label="Warstwa 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text3684"
+       style="font-style:normal;font-weight:normal;font-size:93.33333451px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect3686);fill:#000000;fill-opacity:1;stroke:none" />
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text16684"
+       style="fill:black;fill-opacity:1;line-height:1.25;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;white-space:pre;shape-inside:url(#rect16686)" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,0.5198065,-1.3509323)"
+       id="text35670"
+       style="font-style:normal;font-weight:normal;font-size:93.3333px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect35672);fill:#000000;fill-opacity:1;stroke:none"><tspan
+         x="102.34375"
+         y="381.24455"
+         id="tspan1016"><tspan
+           style="font-weight:bold;-inkscape-font-specification:'sans-serif Bold'"
+           id="tspan1014">SMILE &amp; FLY</tspan></tspan></text>
+    <path
+       id="path53730"
+       style="fill:#ffdd55;stroke:#5577ff;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
+       d="m 42.755013,52.74665 -5.064291,11.687659 0.768946,0.384474 5.064806,-11.688178 z m -18.631421,0.64389 -0.824756,0.243911 4.26744,12.001852 0.824756,-0.243914 z m 30.356285,8.756571 -10.229865,7.590234 0.473874,0.717269 10.229865,-7.590234 z m -44.145107,1.624705 -0.5121137,0.690399 10.6313927,7.017141 0.512113,-0.690912 z m 23.410457,3.200839 a 11.627919,11.756514 0 0 0 -11.627714,11.756388 11.627919,11.756514 0 0 0 1.413867,5.564518 21.587018,9.653285 0 0 1 20.065442,-6.103504 21.587018,9.653285 0 0 1 1.740463,0.03204 11.627919,11.756514 0 0 0 -11.592058,-11.249442 z m -13.43794,10.530107 -12.6545241,1.457791 0.051677,0.858345 12.6545241,-1.458306 z" />
+  </g>
+</svg>

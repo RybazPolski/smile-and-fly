@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Smile&Fly</title>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <td>
+          <img class='header' src="rysunek2.svg">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <form class="formularz"> Od kiedy? <input type="date" id="dateFrom"> Do kiedy? <input type="date" id="dateTo">
+            <br> Miejsce wylotu <select multiple="multiple" id="fromWhere">
+              <option value="BZG">Bydgoszcz</option>
+              <option value="GDN">Gdańsk</option>
+              <option value="KTW" selected="selected">Katowice</option>
+              <option value="KRK">Kraków</option>
+              <option value="LUZ">Lublin</option>
+              <option value="LCJ">Łódź</option>
+              <option value="POZ">Poznań</option>
+              <option value="SZZ">Szczecin</option>
+              <option value="WAW">Warszawa Chopin</option>
+              <option value="WMI">Warszawa Modlin</option>
+              <option value="WRO">Wrocław</option>
+              <option value="N">Rzeszów</option>
+              <option value="N">Zielona Góra</option>
+            </select>
+            <br> Miejsce docelowe <select multiple="multiple" id="toWhere">
+              <option value="dom" selected="selected">Dominikana (cała)</option>
+              <option value="dom-pue">Dominikana Puerto Plata</option>
+              <option value="dom-sam">Dominikana Samana</option>
+              <option value="egi">Egipt (cały)</option>
+              <option value="egi-hur">Egipt Hurghada</option>
+              <option value="egi-mar">Egipt Marsa Alam</option>
+              <option value="egi-sha">Egipt Sharm el Sheikh</option>
+              <option value="egi-tab">Egipt Taba</option>
+              <option value="gre">Grecja (cała)</option>
+              <option value="gre-aie">Grecja Attyka i Evia</option>
+              <option value="gre-cha">Grecja Chalkidiki</option>
+              <option value="gre-kas">Grecja Kasandra</option>
+              <option value="gre-kef">Grecja Kefalonia</option>
+              <option value="gre-kok">Grecja Kokkino Nero</option>
+              <option value="gre-kor">Grecja Korfu</option>
+              <option value="gre-kos">Grecja Kos</option>
+              <option value="gre-kre">Grecja Kreta</option>
+              <option value="gre-lef">Grecja Lefkada</option>
+              <option value="gre-les">Grecja Lesbos</option>
+              <option value="gre-myk">Grecja Mykonos</option>
+              <option value="gre-nax">Grecja Naxos</option>
+              <option value="gre-pel">Grecja Peloponez</option>
+              <option value="gre-ria">Grecja Riwiera Ateńska</option>
+              <option value="gre-rio">Grecja Riwiera Olimpijska</option>
+              <option value="gre-rod">Grecja Rodos</option>
+              <option value="gre-sam">Grecja Samos</option>
+              <option value="gre-san">Grecja Santorini</option>
+              <option value="gre-tha">Grecja Thassos</option>
+              <option value="gre-zak">Grecja Zakynthos</option>
+              <option value="his">Hiszpania (cała)</option>
+              <option value="his-alm">Hiszpania Almeria</option>
+              <option value="his-cal">Hiszpania Costa Almeria</option>
+              <option value="his-cba">Hiszpania Costa Barcelona</option>
+              <option value="his-cbl">Hiszpania Costa Blanca</option>
+              <option value="his-cbr">Hiszpania Costa Brava</option>
+              <option value="his-cdl">Hiszpania Costa de la Luz</option>
+              <option value="his-cdm">Hiszpania Costa del Marasame</option>
+              <option value="his-cdo">Hiszpania Costa Dorada</option>
+              <option value="his-cds">Hiszpania Costa del Sol</option>
+              <option value="his-for">Hiszpania Formentera</option>
+              <option value="his-fue">Hiszpania Fuerteventura</option>
+              <option value="his-gra">Hiszpania Gran Canaria</option>
+              <option value="his-ibi">Hiszpania Ibiza</option>
+              <option value="his-mad">Hiszpania Prowincja Madryt</option>
+              <option value="his-maj">Hiszpania Majorka</option>
+              <option value="his-min">Hiszpania Minorka</option>
+              <option value="his-ten">Hiszpania Teneryfa</option>
+              <option value="his-wyb">Hiszpania Wybrzeże Kadyksu i Costa Ballena</option>
+              <option value="mek">Meksyk (cały)</option>
+              <option value="mek-can">Meksyk Canun</option>
+              <option value="mek-juk">Meksyk Jukatan</option>
+              <option value="mek-riv">Meksyk Riviera Maya</option>
+              <option value="tur">Turcja (cała)</option>
+              <option value="tur-ala">Turcja Alanya</option>
+              <option value="tur-ant">Turcja Antalya</option>
+              <option value="tur-bel">Turcja Belek</option>
+              <option value="tur-bod">Turcja Bodrum</option>
+              <option value="tur-did">Turcja Didyma</option>
+              <option value="tur-fin">Turcja Finike</option>
+              <option value="tur-kem">Turcja Kemer</option>
+              <option value="tur-kus">Turcja Kusadasi</option>
+              <option value="tur-mam">Turcja Mamaris</option>
+              <option value="tur-reg">Turcja Riwiera Egejska</option>
+              <option value="tur-rtu">Turcja Riwiera Turecka</option>
+              <option value="tur-sid">Turcja Side</option>
+              <option value="tur-sta">Turcja Stambuł</option>
+            </select>
+            <br>
+            <br> Ilość dorosłych <input type="number" placeholder="Ilość dorosłych" id="adults">
+            <br> Ilość dzieci <input type="number" placeholder="Ilość dzieci" id="kids"> Daty urodzenia dzieci <input type="date" class="childBirth">
+            <br> Liczba ofert <select id="results">
+              <option>30</option>
+              <option>60</option>
+              <option>90</option>
+              <option>120</option>
+            </select>
+            <br>Sortowanie <select id="order">
+              <option>cena malejąco</option>
+              <option>cena rosnąco</option>
+              <option>najbliższy termin</option>
+            </select>
+          </form>
+        </td>
+        <td class="oferty">
+          <table class="oferta oferta-template" style="display: none;">
+            <tr>
+              <td colspan="2" id="zdjecie">
+                <img src="https://piespustyni.pl/wp-content/uploads/2017/03/475-1.jpg" alt="Zdjęcie oferty">
+              </td>
+              <td class="szczegoly">
+                <h1 id="tytul">Tytuł oferty: </h1>
+                <span id="lokalizacja">Lokalizacja: </span>
+                <span id="gwiazdy">&#11088;</span>
+                <br>
+                <span id="termin">Termin:</span>
+                <br>
+                <span id="wyzywienie">Wyżywienie:</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="ceny">
+                <h3 id="cenaZobnizka" style="text-decoration:line-through; color: gray; margin-bottom: 0;">2 000zł</h3>
+                <h2 id="cenaZaOs" style="margin-top: 0;">1 000zł</h2>
+                <a id="link">
+                  <input type="button" value="Link do oferty">
+                </a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
