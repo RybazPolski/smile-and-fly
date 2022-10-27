@@ -45,7 +45,8 @@
   }
 
   .oferta{
-      border: 2px dashed black;
+      border-radius: 10px 10px 10px 10px;
+      box-shadow: inset 0 0 2em rgb(123, 123, 123);
       margin-bottom: 2.5%;
       width: 50vw;
   }
@@ -62,6 +63,7 @@
       width: 100%;
       object-position: center;
       object-fit: cover;
+      border-radius: 10px 10px 10px 10px;
   }
   .oferta tr .szczegoly{
       display: inline-block;
@@ -76,4 +78,16 @@
       margin-right: 0;
       padding-right: 1.5vw;
       padding-bottom: 1vw;
+  }
+  #button{
+    border-radius: 50px 50px 50px 50px;
+    
+    background-color: gold;
+  }
+  #button:hover{
+    background-color: #000000;
+    color: gold;
+  }
+  body{
+    font-family: 'Century Gothic';
   }
