@@ -104,51 +104,52 @@
             <br> Ilość dorosłych <input type="number" placeholder="Ilość dorosłych" id="adults" value="1" min="1">
             <br> Ilość dzieci <input type="number" placeholder="Ilość dzieci" id="kids" value="0" onchange="addBirthFields()" min="0"><span id="kidsBirthsHeader"></span><span id="kidsBirths"></span>
             <br> Liczba ofert <select id="results">
-              <option>30</option>
-              <option>60</option>
-              <option>90</option>
-              <option>120</option>
+              <option value="10">10</option>
+              <option value="30">30</option>
+              <option value="60">60</option>
+              <option value="90">90</option>
+              <option value="120">120</option>
             </select>
             <br>Sortowanie <select id="order">
                 <option value="dateAsc">najbliższy termin</option>
                 <option value="priceAsc">cena rosnąco</option>
                 <option value="priceDesc">cena malejąco</option>
             </select><br>
-            <input type="submit" value="SZUKAJ 🔎" class='searchButt'>
+            <input type="submit" value="SZUKAJ 🔎" class='searchButt' onclick="searchOffers()">
           </form>
         </td>
         <td class="oferty">
-            <span style="display:none;" id="oferta-template">
-                <table class="oferta">
-                    <tr>
-                        <td colspan="2" id="zdjecie">
-                            <img src="https://piespustyni.pl/wp-content/uploads/2017/03/475-1.jpg" alt="Zdjęcie oferty">
-                        </td>
-                            <td class="szczegoly">
-                                <h1 id="tytul" style="margin-bottom: 0;">Wycieczka tytułowa</h1>
-                                <span id="gwiazdki">&#11088;&#11088;&#11088;&#11088;&#11088;</span><br><br>
-                                <b>Lokalizacja: </b><span id="lokalizacja">NIBYLANDIA / ZATOKA</span>
-                                <br>
-                                <b>Termin: </b><span id="termin">01.01.1970 - 21.12.2012</span>
-                                <br>
-                                <b>Wyżywienie: </b><span id="wyzywienie">Hakuna Matata</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="ceny">
-                                <h3 id="cenaZobnizka" style="text-decoration:line-through; color: gray; margin-bottom: 0;">2 000zł</h3>
-                                <h2 id="cenaZaOs" style="margin-top: 0;">1 000zł</h2>
-                                <a id="link" href="https://youtu.be/dQw4w9WgXcQ" target="_blank">
-                                <input type="button" id="button" style="width:40%;height:3vw; font-size: 1vw;" value="Link do oferty">
-                                </a>
-                            </td>
-                        </tr>
-                    </table>
-            </span>
         </td>
       </tr>
     </table>
-
+    <span style="display:none;" id="oferta-template">
+        <table class="oferta">
+            <tr>
+                <td colspan="2" id="zdjecie">
+                    <img src="https://piespustyni.pl/wp-content/uploads/2017/03/475-1.jpg" id="image" alt="Zdjęcie oferty">
+                </td>
+                    <td class="szczegoly">
+                        <h1 id="tytul" style="margin-bottom: 0;">Wycieczka tytułowa</h1>
+                        <span id="gwiazdki">&#11088;&#11088;&#11088;&#11088;&#11088;</span><br><br>
+                        <b>Lokalizacja: </b><span id="lokalizacja">NIBYLANDIA / ZATOKA</span>
+                        <br>
+                        <b>Termin: </b><span id="termin">01.01.1970 - 21.12.2012</span>
+                        <br>
+                        <b>Wyżywienie: </b><span id="wyzywienie">Hakuna Matata</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ceny">
+                        <h3 id="cenaZobnizka" style="text-decoration:line-through; color: gray; margin-bottom: 0;">2 000zł</h3>
+                        <h2 id="cenaZaOs" style="margin-top: 0;">1 000zł</h2>
+                        <a id="link" href="https://youtu.be/dQw4w9WgXcQ" target="_blank">
+                        <input type="button" id="button" style="width:40%;height:3vw; font-size: 1vw;" value="Link do oferty">
+                        </a>
+                    </td>
+                </tr>
+            </table>
+    </span>
+    
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <script src="./main.js"></script>
   </body>

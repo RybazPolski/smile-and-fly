@@ -104,3 +104,12 @@ body{
 .searchButt:active{
   color: white;
 }
+#image{
+/* margin-top: 0;
+margin-bottom: auto;
+display: block; */
+vertical-align: top;
+}
+#zdjecie{
+  vertical-align: top;
+}
