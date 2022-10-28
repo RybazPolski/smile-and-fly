@@ -1,6 +1,10 @@
 # Wyszukiwarka ofert poprzez biura podróży - bot zdalny
 ## Jak postawić serwer?
 ### Windows / Linux
+#### Wymagania:
+- git
+- node-js
+
 Klonowanie repozytorium
 ```console
 git clone https://github.com/julianrybarczyk/smile-and-fly
