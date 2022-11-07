@@ -37,7 +37,7 @@ form.onsubmit = function(event) {
 }
 
 function searchOffers(){
-    document.querySelector('.oferty').innerHTML="<img style='width:49vw; height:20vw; margin-left:3%;object-position:center; object-fit:contain;' src='https://upload.wikimedia.org/wikipedia/commons/c/c7/Loading_2.gif?20170503175831'>"
+    document.querySelector('.oferty').innerHTML="<img style='width:49vw; height:20vw; margin-left:3%;object-position:center; object-fit:contain;' src='./Loading_2.gif'>"
 
     var travelData = {};
     if(form.dateFrom.value != ""){travelData.dateFrom = form.dateFrom.value};

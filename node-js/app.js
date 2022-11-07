@@ -1,7 +1,7 @@
 const smileAndFly = require('./biura_podrozy/all')
 
 const express = require('express')
-const port = process.env.PORT || 8888
+const port = 8888
 
 const app = express()
 
